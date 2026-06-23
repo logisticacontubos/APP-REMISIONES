@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>Extractor de Remisiones</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <header class="topbar">
+    <button id="backBtn" class="icon-btn" aria-label="Atrás">&larr;</button>
+    <span class="title">Extractor de remisiones</span>
+    <span style="width:32px"></span>
+  </header>
+
+  <main id="content">
+
+    <section id="step1" class="step">
+      <p class="hint">Selecciona el tipo de documento</p>
+      <div class="grid2">
+        <button class="doctype" data-tipo="CAME_MAQUILA">
+          <span class="doctype-name">CAME</span>
+          <span class="doctype-sub">Maquila</span>
+        </button>
+        <button class="doctype" data-tipo="CAME_INTERNO">
+          <span class="doctype-name">CAME</span>
+          <span class="doctype-sub">Interno</span>
+        </button>
+        <button class="doctype" data-tipo="SMURFIT_MAQUILA">
+          <span class="doctype-name">Smurfit</span>
+          <span class="doctype-sub">Maquila</span>
+        </button>
+        <button class="doctype" data-tipo="SMURFIT_INTERNO">
+          <span class="doctype-name">Smurfit</span>
+          <span class="doctype-sub">Interno</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="step2" class="step" hidden>
+      <div class="badge" id="tipoBadge"></div>
+      <div class="dropzone">
+        <p>Foto o PDF del documento</p>
+      </div>
+      <div class="row">
+        <button id="btnFoto" class="action-btn">Tomar foto</button>
+        <button id="btnPdf" class="action-btn">Subir PDF</button>
+      </div>
+      <input type="file" id="inputFoto" accept="image/*" capture="environment" hidden />
+      <input type="file" id="inputPdf" accept="application/pdf,image/*" hidden />
+      <p id="errorMsg" class="error" hidden></p>
+    </section>
+
+    <section id="step3" class="step center" hidden>
+      <div class="spinner"></div>
+      <p class="hint" style="margin-top:16px">Extrayendo datos con IA</p>
+      <p class="hint small">Esto puede tardar unos segundos</p>
+    </section>
+
+    <section id="step4" class="step" hidden>
+      <p class="hint">Revisa y corrige antes de guardar</p>
+      <div id="tableWrap"></div>
+      <button id="addRowBtn" class="action-btn small">+ Agregar fila</button>
+      <button id="saveBtn" class="primary-btn">Guardar en Sheets</button>
+      <p id="saveError" class="error" hidden></p>
+    </section>
+
+    <section id="step5" class="step center" hidden>
+      <div class="check">&#10003;</div>
+      <p id="successMsg" class="hint" style="margin-top:16px"></p>
+      <button id="newDocBtn" class="action-btn">Nuevo documento</button>
+    </section>
+
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
