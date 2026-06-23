@@ -26,7 +26,9 @@ const steps = [1, 2, 3, 4, 5];
 function showStep(n) {
   state.step = n;
   steps.forEach((s) => {
-    document.getElementById("step" + s).hidden = s !== n;
+    var el = document.getElementById("step" + s);
+    el.hidden = s !== n;
+    el.style.display = s === n ? "" : "none";
   });
   document.getElementById("backBtn").style.visibility = n > 1 ? "visible" : "hidden";
 }
@@ -74,8 +76,8 @@ async function handleFile(file, isPhoto) {
       base64 = await compressImage(file, 1600, 0.75);
       mimeType = "image/jpeg";
     } else {
-      if (file.size > 7 * 1024 * 1024) {
-        showError("El archivo es muy grande (máximo ~7MB). Intenta con un PDF más liviano o solo una página.");
+      if (file.size > 3.5 * 1024 * 1024) {
+        showError("El archivo es muy grande (máximo ~3.5MB). Intenta con un PDF más liviano o solo una página.");
         return;
       }
       base64 = await fileToBase64(file);
@@ -129,7 +131,22 @@ async function extraer(base64, mimeType) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tipo: state.tipo, mimeType, base64 })
     });
-    const data = await resp.json();
+
+    if (resp.status === 413) {
+      showStep(2);
+      showError("El archivo es demasiado pesado para procesarlo. Intenta con una foto en vez de PDF, o con menos páginas.");
+      return;
+    }
+
+    let data;
+    try {
+      data = await resp.json();
+    } catch (e) {
+      showStep(2);
+      showError("Ocurrió un error inesperado del servidor (código " + resp.status + "). Intenta con un archivo más liviano.");
+      return;
+    }
+
     if (!data.ok) {
       showStep(2);
       showError(data.error || "No se pudo extraer la información, intenta de nuevo.");
